@@ -28,7 +28,7 @@ export function Terms() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", lineHeight: "1.6" }}>
           <p>
-            Welcome to InventoryApp. By accessing or using our application, websites, or associated software solutions, you agree to comply with and be bound by the following Terms of Service. If you do not agree to these terms, please do not use the application.
+            Welcome to StockFlow. By accessing or using our application, websites, or associated software solutions, you agree to comply with and be bound by the following Terms of Service. If you do not agree to these terms, please do not use the application.
           </p>
 
           <section>
@@ -41,7 +41,7 @@ export function Terms() {
           <section>
             <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "0.75rem" }}>2. Description of Service</h2>
             <p>
-              InventoryApp provides users with stock tracking, product management, sales logs, and financial transaction statistics. We reserve the right to modify, suspend, or discontinue any feature or component of the service at any time with or without notice.
+              StockFlow provides users with stock tracking, product management, sales logs, and financial transaction statistics. We reserve the right to modify, suspend, or discontinue any feature or component of the service at any time with or without notice.
             </p>
           </section>
 
@@ -68,7 +68,7 @@ export function Terms() {
           <section>
             <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "0.75rem" }}>5. Limitation of Liability</h2>
             <p>
-              Under no circumstances shall InventoryApp or its developers be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, inventory assets, or system uptime, arising out of your access to or use of the application.
+              Under no circumstances shall StockFlow or its developers be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, inventory assets, or system uptime, arising out of your access to or use of the application.
             </p>
           </section>
         </div>

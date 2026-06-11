@@ -2,15 +2,18 @@ import { useState, useEffect } from "react";
 import { getActivityLogs } from "../services/db";
 import { Activity, PackagePlus, Edit, Trash, ShoppingBag } from "lucide-react";
 import { animateStagger } from "../utils/animations";
+import { useAuth } from "../context/AuthContext";
 
 export function History() {
+  const { currentUser } = useAuth();
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLogs = async () => {
+      if (!currentUser) return;
       try {
-        const data = await getActivityLogs();
+        const data = await getActivityLogs(currentUser.uid);
         setLogs(data);
       } catch (error) {
         console.error("Error fetching logs", error);

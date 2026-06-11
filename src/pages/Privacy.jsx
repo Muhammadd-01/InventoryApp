@@ -73,7 +73,7 @@ export function Privacy() {
           <section>
             <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "0.75rem" }}>5. Contact Us</h2>
             <p>
-              If you have any questions or feedback about this Privacy Policy, please contact our support team at support@inventoryapp.example.com.
+              If you have any questions or feedback about this Privacy Policy, please contact our support team at support@stockflow.example.com.
             </p>
           </section>
         </div>

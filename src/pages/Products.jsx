@@ -4,8 +4,10 @@ import { getProducts, addProduct, updateProduct, deleteProduct } from "../servic
 import { supabase } from "../supabase";
 import { Badge } from "../components/Badge";
 import { animateStagger } from "../utils/animations";
+import { useAuth } from "../context/AuthContext";
 
 export function Products() {
+  const { currentUser } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -27,9 +29,10 @@ export function Products() {
   }, []);
 
   const fetchProducts = async () => {
+    if (!currentUser) return;
     setLoading(true);
     try {
-      const data = await getProducts();
+      const data = await getProducts(currentUser.uid);
       setProducts(data);
       } catch (error) {
       console.error("Error fetching products", error);
@@ -102,9 +105,9 @@ export function Products() {
       const productToSave = { ...formData, image_url: finalImageUrl };
 
       if (editingProduct) {
-        await updateProduct(editingProduct, productToSave, formData.name);
+        await updateProduct(currentUser.uid, editingProduct, productToSave, formData.name);
       } else {
-        await addProduct(productToSave);
+        await addProduct(currentUser.uid, productToSave);
       }
       
       handleCloseModal();
@@ -120,7 +123,7 @@ export function Products() {
   const handleDelete = async (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       try {
-        await deleteProduct(id, name);
+        await deleteProduct(currentUser.uid, id, name);
         fetchProducts();
       } catch (error) {
         console.error("Error deleting product", error);

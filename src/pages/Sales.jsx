@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { getProducts, getSales, recordSale } from "../services/db";
 import { ShoppingCart } from "lucide-react";
 import { animateStagger } from "../utils/animations";
+import { useAuth } from "../context/AuthContext";
 
 export function Sales() {
+  const { currentUser } = useAuth();
   const [products, setProducts] = useState([]);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,11 +22,12 @@ export function Sales() {
   }, []);
 
   const fetchData = async () => {
+    if (!currentUser) return;
     setLoading(true);
     try {
       const [productsData, salesData] = await Promise.all([
-        getProducts(),
-        getSales()
+        getProducts(currentUser.uid),
+        getSales(currentUser.uid)
       ]);
       setProducts(productsData.filter(p => p.quantity > 0)); // Only show products with stock
       setSales(salesData);
@@ -52,7 +55,7 @@ export function Sales() {
     }
 
     try {
-      await recordSale(product.id, product.name, formData.quantitySold, formData.customerName, formData.date);
+      await recordSale(currentUser.uid, product.id, product.name, formData.quantitySold, formData.customerName, formData.date);
       setFormData({
         productId: "",
         quantitySold: 1,

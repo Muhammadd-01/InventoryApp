@@ -586,3 +586,54 @@ body.dark .notification-toast {
 }
 
 
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+    width: 250px;
+  }
+  .main-content {
+    margin-left: 0 !important;
+    padding: 1rem;
+  }
+  .sidebar-collapsed .main-content {
+    margin-left: 0 !important;
+  }
+  
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-header {
+    display: none;
+  }
+}
+
+/* Autofill fixes for dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--surface) inset !important;
+    -webkit-text-fill-color: var(--text-main) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+select option {
+  background-color: var(--surface);
+  color: var(--text-main);
+}

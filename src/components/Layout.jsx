@@ -6,7 +6,7 @@ export function Layout() {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(() => {
     const saved = localStorage.getItem("sidebar_collapsed");
-    return saved !== null ? JSON.parse(saved) : false;
+    return saved !== null ? JSON.parse(saved) : window.innerWidth <= 768;
   });
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -35,6 +35,17 @@ export function Layout() {
     <div className={`app-container ${isCollapsed ? "sidebar-collapsed" : ""}`}>
       <Sidebar isCollapsed={isCollapsed} onToggle={handleToggle} onLogoutStart={handleLogoutStart} />
       <main className="main-content">
+        <div className="mobile-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: 'var(--primary)' }}>
+            StockFlow
+          </div>
+          <button 
+            onClick={handleToggle}
+            style={{ background: 'none', border: 'none', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+        </div>
         <Outlet />
       </main>
 
@@ -66,7 +77,7 @@ export function Layout() {
             marginBottom: "1.5rem"
           }} />
           <h2 style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: "0.5rem", color: "#f8fafc" }}>Securing Session...</h2>
-          <p style={{ color: "#94a3b8", fontSize: "0.875rem" }}>Signing out of InventoryApp safely</p>
+          <p style={{ color: "#94a3b8", fontSize: "0.875rem" }}>Signing out of StockFlow safely</p>
         </div>
       )}
     </div>

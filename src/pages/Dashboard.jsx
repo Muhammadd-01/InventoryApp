@@ -3,8 +3,10 @@ import { Package, AlertCircle, ShoppingCart, DollarSign, Activity, ShieldCheck, 
 import { getProducts, getSales } from "../services/db";
 import { animateStagger } from "../utils/animations";
 import { useNotification } from "../context/NotificationContext";
+import { useAuth } from "../context/AuthContext";
 
 export function Dashboard() {
+  const { currentUser } = useAuth();
   const [products, setProducts] = useState([]);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,10 +15,11 @@ export function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!currentUser) return;
       try {
         const [productsData, salesData] = await Promise.all([
-          getProducts(),
-          getSales()
+          getProducts(currentUser.uid),
+          getSales(currentUser.uid)
         ]);
         setProducts(productsData);
         setSales(salesData);
@@ -71,7 +74,7 @@ export function Dashboard() {
       )}`;
       const downloadAnchor = document.createElement("a");
       downloadAnchor.setAttribute("href", jsonString);
-      downloadAnchor.setAttribute("download", `inventoryapp_${type}_backup_${Date.now()}.json`);
+      downloadAnchor.setAttribute("download", `stockflow_${type}_backup_${Date.now()}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();

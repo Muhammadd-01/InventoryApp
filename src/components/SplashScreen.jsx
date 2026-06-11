@@ -43,7 +43,7 @@ export function SplashScreen() {
         </Canvas>
       </div>
       <h2 style={{ color: 'white', marginTop: '2rem', fontFamily: 'Inter, sans-serif', letterSpacing: '2px', animation: 'pulse 2s infinite' }}>
-        LOADING APP...
+        STOCKFLOW
       </h2>
       <style>{`
         @keyframes pulse {

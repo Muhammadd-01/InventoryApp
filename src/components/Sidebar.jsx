@@ -25,7 +25,7 @@ export function Sidebar({ isCollapsed, onToggle, onLogoutStart }) {
       <div className="sidebar-header" style={{ justifyContent: isCollapsed ? 'center' : 'space-between', padding: isCollapsed ? '1.5rem 0.5rem' : '1.5rem' }}>
         <div className="logo-container" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <Package size={24} />
-          {!isCollapsed && <span>InventoryApp</span>}
+          {!isCollapsed && <span>StockFlow</span>}
         </div>
         <button 
           onClick={onToggle}
