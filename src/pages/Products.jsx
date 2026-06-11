@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, Search, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, Image as ImageIcon, Eye } from "lucide-react";
 import { getProducts, addProduct, updateProduct, deleteProduct } from "../services/db";
 import { supabase } from "../supabase";
 import { Badge } from "../components/Badge";
@@ -15,6 +15,7 @@ export function Products() {
   const [search, setSearch] = useState("");
   const [filterStock, setFilterStock] = useState("ALL"); 
   
+  const [viewingProduct, setViewingProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
@@ -218,6 +219,9 @@ export function Products() {
                     <td><Badge quantity={product.quantity} /></td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setViewingProduct(product)}>
+                          <Eye size={16} />
+                        </button>
                         <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleOpenModal(product)}>
                           <Edit2 size={16} />
                         </button>
@@ -309,6 +313,62 @@ export function Products() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Product Details View Modal */}
+      {viewingProduct && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '500px' }}>
+            <div className="modal-header">
+              <h2>Product Details</h2>
+              <button className="modal-close" onClick={() => setViewingProduct(null)}>✕</button>
+            </div>
+            <div className="modal-body">
+              <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                <div style={{ flexShrink: 0 }}>
+                  {viewingProduct.image_url ? (
+                    <img src={viewingProduct.image_url} alt={viewingProduct.name} style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '12px', border: '1px solid var(--border)' }} />
+                  ) : (
+                    <div style={{ width: '150px', height: '150px', backgroundColor: 'var(--background)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                      <ImageIcon size={48} />
+                    </div>
+                  )}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{viewingProduct.name}</h3>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <span className="badge" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)' }}>{viewingProduct.category}</span>
+                    <Badge quantity={viewingProduct.quantity} />
+                  </div>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1.5rem' }}>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SKU</div>
+                      <div style={{ fontWeight: 600 }}>{viewingProduct.sku}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quantity</div>
+                      <div style={{ fontWeight: 600 }}>{viewingProduct.quantity} Units</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Purchase Price</div>
+                      <div style={{ fontWeight: 600 }}>${Number(viewingProduct.purchase_price).toFixed(2)}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Selling Price</div>
+                      <div style={{ fontWeight: 600, color: 'var(--success)' }}>${Number(viewingProduct.selling_price).toFixed(2)}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
+              <button className="btn btn-primary" onClick={() => setViewingProduct(null)} style={{ width: '100%', justifyContent: 'center' }}>
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

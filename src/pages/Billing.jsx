@@ -76,7 +76,10 @@ export function Billing() {
         </div>
       </div>
 
-      <div className="dashboard-grid" style={{ marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'flex-start' }}>
+        <div style={{ flex: '1 1 60%' }}>
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Subscription Plans</h2>
+          <div className="dashboard-grid" style={{ marginBottom: '3rem' }}>
         {plans.map(plan => (
           <div key={plan.id} className="card pricing-card" style={{ opacity: 0, border: currentPlan === plan.id ? '2px solid var(--primary)' : '1px solid var(--border)' }}>
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{plan.name}</h3>
@@ -103,48 +106,52 @@ export function Billing() {
           </div>
         ))}
       </div>
-
-      {/* Payment Methods Section */}
-      <div className="card" style={{ marginTop: '2rem', marginBottom: '3rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h2 style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <CreditCard size={20} style={{ color: 'var(--primary)' }} /> Payment Methods
-          </h2>
-          <button className="btn btn-primary" onClick={() => setIsAddingCard(true)}>
-            <Plus size={16} /> Add Method
-          </button>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {paymentMethods.map(method => (
-            <div key={method.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', border: '1px solid var(--border)', borderRadius: '0.5rem', background: 'var(--surface)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ padding: '0.5rem', background: 'var(--primary-light)', borderRadius: '0.25rem', color: 'var(--primary)' }}>
-                  <CreditCard size={24} />
-                </div>
-                <div>
-                  <div style={{ fontWeight: 600 }}>{method.brand} ending in {method.last4}</div>
-                  <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Expires {method.exp}</div>
-                </div>
-                {method.isDefault && (
-                  <span className="badge badge-success" style={{ marginLeft: '1rem' }}>Default</span>
-                )}
-              </div>
-              <button 
-                className="btn btn-secondary" 
-                style={{ padding: '0.5rem', color: 'var(--danger)', border: 'none', background: 'transparent' }}
-                onClick={() => setPaymentMethods(prev => prev.filter(m => m.id !== method.id))}
-                title="Remove Payment Method"
-              >
-                <Trash2 size={18} />
+        <div style={{ flex: '1 1 30%' }}>
+          {/* Payment Methods Section */}
+          <div className="card" style={{ marginBottom: '3rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <CreditCard size={20} style={{ color: 'var(--primary)' }} /> Payment Methods
+              </h2>
+              <button className="btn btn-primary" onClick={() => setIsAddingCard(true)}>
+                <Plus size={16} /> Add Method
               </button>
             </div>
-          ))}
-          {paymentMethods.length === 0 && (
-            <div style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem 0' }}>
-              No payment methods saved. Add one to keep your subscription active.
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {paymentMethods.map(method => (
+                <div key={method.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', border: '1px solid var(--border)', borderRadius: '0.5rem', background: 'var(--surface)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ padding: '0.5rem', background: 'var(--primary-light)', borderRadius: '0.25rem', color: 'var(--primary)' }}>
+                      <CreditCard size={24} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{method.brand} ending in {method.last4}</div>
+                      <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Expires {method.exp}</div>
+                    </div>
+                    {method.isDefault && (
+                      <span className="badge badge-success" style={{ marginLeft: '1rem' }}>Default</span>
+                    )}
+                  </div>
+                  <button 
+                    className="btn btn-secondary" 
+                    style={{ padding: '0.5rem', color: 'var(--danger)', border: 'none', background: 'transparent' }}
+                    onClick={() => setPaymentMethods(prev => prev.filter(m => m.id !== method.id))}
+                    title="Remove Payment Method"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+              {paymentMethods.length === 0 && (
+                <div style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem 0' }}>
+                  No payment methods saved. Add one to keep your subscription active.
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
