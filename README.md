@@ -42,6 +42,14 @@ The app features a gorgeous **Glassmorphism** aesthetic, a customizable manual d
 - Features a secure checkout modal with credit card details input validation.
 - Upgrading tiers dynamically updates the Firestore document data.
 
+### 8. Logging Out Animation Screen
+- Initiates a smooth, 1.5-second glassmorphism overlay transition blocking screen inputs when logging out.
+- Displays a spinning loading ring and "Securing Session..." text status to provide a high-end, secure UX sensation.
+
+### 9. System Telemetry & Local Backups
+- **Live Sync Telemetry Widget**: Displays real-time database connection logs, fluctuating network latency, verification status, and memory metrics on the Dashboard.
+- **Client-Side JSON Exports**: Added downloadable backups of your Products and Sales Ledger directly to local files, complete with glassmorphic toast notification feedback.
+
 ---
 
 ## 📁 Project Architecture & Structure

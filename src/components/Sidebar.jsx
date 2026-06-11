@@ -2,18 +2,23 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Package, ShoppingCart, Activity, LogOut, User, CreditCard, Settings, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-export function Sidebar({ isCollapsed, onToggle }) {
+export function Sidebar({ isCollapsed, onToggle, onLogoutStart }) {
   const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
 
   async function handleLogout() {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error("Failed to log out", error);
+    if (onLogoutStart) {
+      onLogoutStart(logout);
+    } else {
+      try {
+        await logout();
+        navigate('/login');
+      } catch (error) {
+        console.error("Failed to log out", error);
+      }
     }
   }
+
 
   return (
     <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
