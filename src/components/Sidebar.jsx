@@ -1,8 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingCart, Activity, LogOut, User, CreditCard, Settings } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Activity, LogOut, User, CreditCard, Settings, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-export function Sidebar() {
+export function Sidebar({ isCollapsed, onToggle }) {
   const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -16,55 +16,81 @@ export function Sidebar() {
   }
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">
-        <Package size={24} />
-        <span>InventoryApp</span>
+    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <div className="sidebar-header" style={{ justifyContent: isCollapsed ? 'center' : 'space-between', padding: isCollapsed ? '1.5rem 0.5rem' : '1.5rem' }}>
+        <div className="logo-container" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Package size={24} />
+          {!isCollapsed && <span>InventoryApp</span>}
+        </div>
+        <button 
+          onClick={onToggle}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0.25rem',
+            borderRadius: '4px',
+          }}
+          className="collapse-toggle-btn"
+          title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        >
+          {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        </button>
       </div>
       <nav className="sidebar-nav">
         <NavLink to="/" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`} end>
           <LayoutDashboard size={20} />
-          <span>Dashboard</span>
+          {!isCollapsed && <span>Dashboard</span>}
         </NavLink>
         <NavLink to="/products" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <Package size={20} />
-          <span>Products</span>
+          {!isCollapsed && <span>Products</span>}
         </NavLink>
         <NavLink to="/sales" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <ShoppingCart size={20} />
-          <span>Sales</span>
+          {!isCollapsed && <span>Sales</span>}
         </NavLink>
         <NavLink to="/history" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <Activity size={20} />
-          <span>History</span>
+          {!isCollapsed && <span>History</span>}
         </NavLink>
         <NavLink to="/profile" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <User size={20} />
-          <span>Profile</span>
+          {!isCollapsed && <span>Profile</span>}
         </NavLink>
         <NavLink to="/billing" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <CreditCard size={20} />
-          <span>Billing</span>
+          {!isCollapsed && <span>Billing</span>}
         </NavLink>
         <NavLink to="/settings" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <Settings size={20} />
-          <span>Settings</span>
+          {!isCollapsed && <span>Settings</span>}
         </NavLink>
       </nav>
-      <div style={{ padding: '1.5rem', borderTop: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)', alignItems: 'center' }}>
-          <NavLink to="/privacy" style={({isActive}) => ({ color: isActive ? 'var(--primary)' : 'var(--text-muted)', textDecoration: 'none' })}>Privacy</NavLink>
-          <span>•</span>
-          <NavLink to="/terms" style={({isActive}) => ({ color: isActive ? 'var(--primary)' : 'var(--text-muted)', textDecoration: 'none' })}>Terms</NavLink>
-        </div>
-        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem', wordBreak: 'break-all' }}>
-          {currentUser?.email}
-        </div>
-        <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center' }} onClick={handleLogout}>
-          <LogOut size={16} /> Logout
+      <div className="sidebar-footer" style={{ padding: isCollapsed ? '1.5rem 0.5rem' : '1.5rem', borderTop: '1px solid var(--border)' }}>
+        {!isCollapsed && (
+          <div className="sidebar-footer-links" style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)', alignItems: 'center' }}>
+            <NavLink to="/privacy" style={({isActive}) => ({ color: isActive ? 'var(--primary)' : 'var(--text-muted)', textDecoration: 'none' })}>Privacy</NavLink>
+            <span>•</span>
+            <NavLink to="/terms" style={({isActive}) => ({ color: isActive ? 'var(--primary)' : 'var(--text-muted)', textDecoration: 'none' })}>Terms</NavLink>
+          </div>
+        )}
+        {!isCollapsed && (
+          <div className="user-email" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem', wordBreak: 'break-all' }}>
+            {currentUser?.email}
+          </div>
+        )}
+        <button className="btn btn-secondary logout-btn" style={{ width: '100%', justifyContent: 'center' }} onClick={handleLogout}>
+          <LogOut size={16} />
+          {!isCollapsed && <span style={{ marginLeft: '0.5rem' }}>Logout</span>}
         </button>
       </div>
     </div>
   );
 }
+
 
