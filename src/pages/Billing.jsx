@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CreditCard, CheckCircle2 } from "lucide-react";
+import { CreditCard, CheckCircle2, Plus, Trash2, ShieldCheck } from "lucide-react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
@@ -13,6 +13,10 @@ export function Billing() {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState([
+    { id: 1, brand: "Visa", last4: "4242", exp: "12/26", isDefault: true }
+  ]);
+  const [isAddingCard, setIsAddingCard] = useState(false);
 
   useEffect(() => {
     async function fetchPlan() {
@@ -100,6 +104,50 @@ export function Billing() {
         ))}
       </div>
 
+      {/* Payment Methods Section */}
+      <div className="card" style={{ marginTop: '2rem', marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <CreditCard size={20} style={{ color: 'var(--primary)' }} /> Payment Methods
+          </h2>
+          <button className="btn btn-primary" onClick={() => setIsAddingCard(true)}>
+            <Plus size={16} /> Add Method
+          </button>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {paymentMethods.map(method => (
+            <div key={method.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', border: '1px solid var(--border)', borderRadius: '0.5rem', background: 'var(--surface)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ padding: '0.5rem', background: 'var(--primary-light)', borderRadius: '0.25rem', color: 'var(--primary)' }}>
+                  <CreditCard size={24} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: 600 }}>{method.brand} ending in {method.last4}</div>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Expires {method.exp}</div>
+                </div>
+                {method.isDefault && (
+                  <span className="badge badge-success" style={{ marginLeft: '1rem' }}>Default</span>
+                )}
+              </div>
+              <button 
+                className="btn btn-secondary" 
+                style={{ padding: '0.5rem', color: 'var(--danger)', border: 'none', background: 'transparent' }}
+                onClick={() => setPaymentMethods(prev => prev.filter(m => m.id !== method.id))}
+                title="Remove Payment Method"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
+          {paymentMethods.length === 0 && (
+            <div style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem 0' }}>
+              No payment methods saved. Add one to keep your subscription active.
+            </div>
+          )}
+        </div>
+      </div>
+
       {selectedPlan && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -131,6 +179,54 @@ export function Billing() {
                 <button type="button" className="btn btn-secondary" disabled={processing} onClick={() => setSelectedPlan(null)}>Cancel</button>
                 <button type="submit" className="btn btn-primary" disabled={processing}>
                   {processing ? "Processing..." : "Confirm Payment"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Payment Method Modal */}
+      {isAddingCard && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>Add Payment Method</h2>
+              <button className="modal-close" onClick={() => setIsAddingCard(false)}>✕</button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              setProcessing(true);
+              setTimeout(() => {
+                setPaymentMethods(prev => [...prev, { id: Date.now(), brand: "Mastercard", last4: "8888", exp: "10/28", isDefault: prev.length === 0 }]);
+                setIsAddingCard(false);
+                setProcessing(false);
+                show("Payment method added successfully!", "success");
+              }, 1000);
+            }}>
+              <div className="modal-body">
+                <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--success)' }}>
+                  <ShieldCheck size={20} /> <span style={{ fontSize: '0.875rem' }}>Your payment information is securely encrypted.</span>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Card Number</label>
+                  <input required type="text" placeholder="0000 0000 0000 0000" className="form-control" maxLength="19" />
+                </div>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">Expiry (MM/YY)</label>
+                    <input required type="text" placeholder="MM/YY" className="form-control" maxLength="5" />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">CVC</label>
+                    <input required type="text" placeholder="123" className="form-control" maxLength="4" />
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" disabled={processing} onClick={() => setIsAddingCard(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" disabled={processing}>
+                  {processing ? "Saving..." : "Save Card"}
                 </button>
               </div>
             </form>
